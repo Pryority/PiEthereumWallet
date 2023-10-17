@@ -1,8 +1,11 @@
 #Created by Snarflakes.
 #To Satoshi and Vitalik, saludos amigos.
 #GNU General Public License v3.0
-#Permissions of this strong copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work, 
-#under the same license. Copyright and license notices must be preserved. Contributors provide an express grant of patent rights. 
+#Permissions of this strong copyleft license are conditioned on making available complete source code of licensed works and modifications, which include larger works using a licensed work,
+#under the same license. Copyright and license notices must be preserved. Contributors provide an express grant of patent rights.
+
+import sys
+print(sys.executable)
 
 import csv
 import os
@@ -46,6 +49,8 @@ import socket
 #screen rotate
 import pickle
 
+
+
 #random
 from random import randint
 
@@ -54,7 +59,7 @@ import numpy
 import json
 import qrcode
 
-from web3 import Web3 
+from web3 import Web3
 from eth_account import Account
 import secrets
 from uniswap import Uniswap
@@ -62,8 +67,8 @@ from uniswap import Uniswap
 #connect web3 host/node info
 #infura_url = 'https://mainnet.infura.io/v3/aead12b7af1947b19f1b1d9b00d7b9b8'
 #infura_url = 'https://eth-mainnet.g.alchemy.com/v2/e2Uyo6jgkqXVx0bYGSyR7XfABGh4xJYT'
-infura_url = 'https://mainnet.infura.io/v3/de98810e949943d19f7b1096b9181325'
-#infura_url = 'https://goerli.infura.io/v3/6e3044367252450f96047f6e34833089' 
+infura_url = 'https://mainnet.infura.io/v3/30e093dfb77d47589bda8b56ae38e7c1'
+#infura_url = 'https://goerli.infura.io/v3/6e3044367252450f96047f6e34833089'
 web3 = Web3(Web3.HTTPProvider(infura_url))
 
 #Primary Token Pairs: token_address's and ETH(don't forget to set custom ABI if changing USDC to a new token) Token_address is the main displayed token on home screen (needs its own abi for proper wallet amount)
@@ -92,7 +97,7 @@ cs_pin = DigitalInOut(board.CE0)
 dc_pin = DigitalInOut(board.D25)
 reset_pin = DigitalInOut(board.D27)
 BAUDRATE = 24000000
- 
+
 spi = board.SPI()
 disp = st7789.ST7789(
     spi,
@@ -132,7 +137,7 @@ def splash_screen():
 
 
 
-def internet(host="8.8.8.8", port=53, timeout=3):
+def internet(host="1.1.1.1", port=53, timeout=3):
 	"""
 	Host: 8.8.8.8 (google-public-dns-a.google.com)
 	OpenPort: 53/tcp
@@ -191,7 +196,7 @@ def refresh():
 #check for bad link
         try:
             disp.image(imgrender2)
-#            time.sleep(0.25)            
+#            time.sleep(0.25)
         except PIL.UnidentifiedImageError:
             print("Bad Link/File")
 
@@ -214,8 +219,8 @@ def refresh():
 #        im = im.rotate()
         disp.image(im)
         print("no internet available")
- 
- 
+
+
 def no_NFT():
     global apps_data
     opened_file = open('/boot/ethereumwallet.csv')
@@ -246,8 +251,8 @@ def no_NFT():
             time.sleep(0.25)
 
 # print current account value
-            balance = web3.eth.getBalance(acct.address)
-            print('Account Balance: ', (web3.fromWei(balance, 'Ether')))
+            balance = web3.eth.get_balance(acct.address)
+            print('Account Balance: ', (web3.from_wei(balance, 'Ether')))
 
 #store address in ethereumwallet.csv
             csv2.write("{},{},{}\n".format(datetime.datetime.now(), acct.address, private_key))
@@ -302,7 +307,7 @@ def transactions():
     print("transaction button pressed")
     if internet():
         print("internet")
-        
+
     else:
        print("no internet available")
 
@@ -361,8 +366,8 @@ def transactions():
     print(wallet)
     time.sleep(0.25)
 # print current ETH account value
-    balance = web3.eth.getBalance(acct.address)
-    print('Account Balance: ', (web3.fromWei(balance, 'Ether')))
+    balance = web3.eth.get_balance(acct.address)
+    print('Account Balance: ', (web3.from_wei(balance, 'Ether')))
 
 # USDC ABI in order to print amount of USDC present
     abi = json.loads('[{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"authorizer","type":"address"},{"indexed":true,"internalType":"bytes32","name":"nonce","type":"bytes32"}],"name":"AuthorizationCanceled","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"authorizer","type":"address"},{"indexed":true,"internalType":"bytes32","name":"nonce","type":"bytes32"}],"name":"AuthorizationUsed","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"_account","type":"address"}],"name":"Blacklisted","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"newBlacklister","type":"address"}],"name":"BlacklisterChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"burner","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Burn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"newMasterMinter","type":"address"}],"name":"MasterMinterChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"minter","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Mint","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"minter","type":"address"},{"indexed":false,"internalType":"uint256","name":"minterAllowedAmount","type":"uint256"}],"name":"MinterConfigured","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"oldMinter","type":"address"}],"name":"MinterRemoved","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":false,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[],"name":"Pause","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"newAddress","type":"address"}],"name":"PauserChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"newRescuer","type":"address"}],"name":"RescuerChanged","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"_account","type":"address"}],"name":"UnBlacklisted","type":"event"},{"anonymous":false,"inputs":[],"name":"Unpause","type":"event"},{"inputs":[],"name":"CANCEL_AUTHORIZATION_TYPEHASH","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"DOMAIN_SEPARATOR","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"PERMIT_TYPEHASH","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"RECEIVE_WITH_AUTHORIZATION_TYPEHASH","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"TRANSFER_WITH_AUTHORIZATION_TYPEHASH","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"authorizer","type":"address"},{"internalType":"bytes32","name":"nonce","type":"bytes32"}],"name":"authorizationState","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_account","type":"address"}],"name":"blacklist","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"blacklister","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"burn","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"authorizer","type":"address"},{"internalType":"bytes32","name":"nonce","type":"bytes32"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"cancelAuthorization","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"minter","type":"address"},{"internalType":"uint256","name":"minterAllowedAmount","type":"uint256"}],"name":"configureMinter","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"currency","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"decrement","type":"uint256"}],"name":"decreaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"increment","type":"uint256"}],"name":"increaseAllowance","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"tokenName","type":"string"},{"internalType":"string","name":"tokenSymbol","type":"string"},{"internalType":"string","name":"tokenCurrency","type":"string"},{"internalType":"uint8","name":"tokenDecimals","type":"uint8"},{"internalType":"address","name":"newMasterMinter","type":"address"},{"internalType":"address","name":"newPauser","type":"address"},{"internalType":"address","name":"newBlacklister","type":"address"},{"internalType":"address","name":"newOwner","type":"address"}],"name":"initialize","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"newName","type":"string"}],"name":"initializeV2","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"lostAndFound","type":"address"}],"name":"initializeV2_1","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_account","type":"address"}],"name":"isBlacklisted","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"isMinter","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"masterMinter","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"_to","type":"address"},{"internalType":"uint256","name":"_amount","type":"uint256"}],"name":"mint","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"minter","type":"address"}],"name":"minterAllowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"}],"name":"nonces","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"paused","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"pauser","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"},{"internalType":"uint256","name":"deadline","type":"uint256"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"permit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"},{"internalType":"uint256","name":"validAfter","type":"uint256"},{"internalType":"uint256","name":"validBefore","type":"uint256"},{"internalType":"bytes32","name":"nonce","type":"bytes32"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"receiveWithAuthorization","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"minter","type":"address"}],"name":"removeMinter","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"contract IERC20","name":"tokenContract","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"rescueERC20","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"rescuer","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"},{"internalType":"uint256","name":"validAfter","type":"uint256"},{"internalType":"uint256","name":"validBefore","type":"uint256"},{"internalType":"bytes32","name":"nonce","type":"bytes32"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"transferWithAuthorization","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_account","type":"address"}],"name":"unBlacklist","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"unpause","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_newBlacklister","type":"address"}],"name":"updateBlacklister","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_newMasterMinter","type":"address"}],"name":"updateMasterMinter","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_newPauser","type":"address"}],"name":"updatePauser","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"newRescuer","type":"address"}],"name":"updateRescuer","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"version","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"}]')
@@ -391,7 +396,7 @@ def transactions():
 
 # define the sender address and prints the balance (in ETH)
     balance = web3.eth.get_balance(wallet)
-    print("This address has:", web3.fromWei(balance, "ether"), "ETH")
+    print("This address has:", web3.from_wei(balance, "ether"), "ETH")
 
 ##################check for presence of USDC or defined token_address token
     if token_balance == 0:
@@ -423,7 +428,7 @@ def transactions():
     try:
         tx_hash = uniswap.make_trade(token_address, eth, token_balance, fee=500)
         print("USDC to ETH tx sent")
-        print(web3.toHex(tx_hash))
+        print(web3.to_hex(tx_hash))
         time.sleep(3)
     except ValueError:
         print("Insufficient funds for swap transaction")
@@ -443,7 +448,7 @@ def transactions():
 #draw token values
     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 14)
 #        im = Image.new("RGB", (150, 50))
-    d = ImageDraw.Draw(overlay)                
+    d = ImageDraw.Draw(overlay)
     d.text((50, 175), " Tx Status in", fill="black", anchor="ms", font=font)
     d.text((50, 195), "QRcode->", fill="black", anchor="ms", font=font)
 
@@ -457,7 +462,7 @@ def transactions():
 
 # add qrcode to right corner
     qr = qrcode.QRCode()
-    qr.add_data(f"https://etherscan.io/tx/{web3.toHex(tx_hash)}")
+    qr.add_data(f"https://etherscan.io/tx/{web3.to_hex(tx_hash)}")
 #    qr.add_data(wallet)
     qr.make()
     imgrender = qr.make_image(fill_color="black", back_color="#FAF9F6")
@@ -468,7 +473,7 @@ def transactions():
 #check for bad link
     try:
         disp.image(imgrender2)
-#            time.sleep(0.25)            
+#            time.sleep(0.25)
     except PIL.UnidentifiedImageError:
         print("Bad Link/File")
 
@@ -558,8 +563,8 @@ def homescreen():
     print(wallet)
     time.sleep(0.25)
 # print current ETH account value
-    balance = web3.eth.getBalance(acct.address)
-    print('Account Balance: ', (web3.fromWei(balance, 'Ether')))
+    balance = web3.eth.get_balance(acct.address)
+    print('Account Balance: ', (web3.from_wei(balance, 'Ether')))
 
 # print  USDC or main token_address selected (make sure correct ABI is here)
 #ABI for usdc goerli
@@ -585,8 +590,8 @@ def homescreen():
 
     font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
 #        im = Image.new("RGB", (150, 50))
-    d = ImageDraw.Draw(overlay)                
-    d.text((60, 210), "ETH:  " + str(round(web3.fromWei(balance, 'Ether'), 3)), fill="black", anchor="ms", font=font)
+    d = ImageDraw.Draw(overlay)
+    d.text((60, 210), "ETH:  " + str(round(web3.from_wei(balance, 'Ether'), 3)), fill="black", anchor="ms", font=font)
     d.text((60, 230), str(token_declare.functions.symbol().call()) + ":" + str(round(token_balance/1000000, 2)), fill="black", anchor="ms", font=font)
     d.text((170, 70), "Gas " + str(t['result']['FastGasPrice']), fill="white", anchor="ms", font=font)
 
@@ -610,7 +615,7 @@ def homescreen():
 #check for bad link
     try:
         disp.image(imgrender2)
-#            time.sleep(0.25)            
+#            time.sleep(0.25)
     except PIL.UnidentifiedImageError:
         print("Bad Link/File")
 
@@ -677,7 +682,7 @@ def showkey():
 
     try:
         disp.image(im)
-        time.sleep(0.25)            
+        time.sleep(0.25)
     except PIL.UnidentifiedImageError:
         print("Bad Link/File")
 
@@ -691,7 +696,7 @@ button3 = Button(16)
 
 buttonL = Button(5)
 buttonR = Button(26)
-buttonU = Button(6) 
+buttonU = Button(6)
 buttonD = Button(19)
 buttonC = Button(13)
 
@@ -707,7 +712,7 @@ if internet() == False:
     im = Image.new("RGB", (240, 240), "blue")
     d = ImageDraw.Draw(im)
     d.text((120, 80), "No internet Connection", fill="black", anchor="ms", font=font)
-    d.text((120, 120), 'Re-Pair using Homebridge', fill='black', anchor='ms', font=font) 
+    d.text((120, 120), 'Re-Pair using Homebridge', fill='black', anchor='ms', font=font)
     d.text((120, 140), "(re-enter the wifi Psswrd)", fill="black", anchor="ms", font=font)
     d.text((120, 160), "Or move closer to signal", fill="black", anchor="ms", font=font)
     d.text((120, 180), "Or wait and device", fill="black", anchor="ms", font=font)
@@ -750,8 +755,8 @@ if internet() == False:
             time.sleep(1)
 
 if internet():
-    isConnected = web3.isConnected()
-    blocknumber = web3.eth.blockNumber
+    isConnected = web3.is_connected()
+    blocknumber = web3.eth.block_number
     print('Connected: ', isConnected, 'BlockNumber: ', blocknumber)
 
 else:
@@ -778,7 +783,7 @@ print("""
 Your ETH Wallet, Gan Punk
 """)
 
-try: 
+try:
 
     button1.when_pressed = shut_down
     button2.when_pressed = push_button2
