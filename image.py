@@ -64,10 +64,17 @@ from eth_account import Account
 import secrets
 from uniswap import Uniswap
 
+with open('config.json', 'r') as config_file:
+    config = json.load(config_file)
+    infura_api_key = config.get('infura_api_key')
+
+if infura_api_key is None:
+    raise ValueError("INFURA_API_KEY is not found in the config file")
+
 #connect web3 host/node info
 #infura_url = 'https://mainnet.infura.io/v3/aead12b7af1947b19f1b1d9b00d7b9b8'
 #infura_url = 'https://eth-mainnet.g.alchemy.com/v2/e2Uyo6jgkqXVx0bYGSyR7XfABGh4xJYT'
-infura_url = 'https://mainnet.infura.io/v3/30e093dfb77d47589bda8b56ae38e7c1'
+infura_url = f'https://mainnet.infura.io/v3/{infura_api_key}'
 #infura_url = 'https://goerli.infura.io/v3/6e3044367252450f96047f6e34833089'
 web3 = Web3(Web3.HTTPProvider(infura_url))
 
